@@ -9,15 +9,17 @@ module BooksDL
     # API ENDPOINTS
     #
     # rubocop:disable Metrics/LineLength
-    CART_URL = 'https://db.books.com.tw/shopping/cart_list.php'.freeze
+    CART_URL = 'https://db.books.com.tw/shopping/cart_list.php?loc=tw_customer_001'.freeze
     LOGIN_HOST = 'https://cart.books.com.tw'.freeze
-    LOGIN_PAGE_URL = "https://cart.books.com.tw/member/login?url=#{CART_URL}".freeze
-    LOGIN_ENDPOINT_URL = 'https://cart.books.com.tw/member/login_do/'.freeze
+    LOGIN_PAGE_URL = "#{LOGIN_HOST}/login?url=#{CART_URL}".freeze
+    LOGIN_ENDPOINT_URL = "#{LOGIN_HOST}/member/login_do/".freeze
 
-    DEVICE_REG_URL = 'https://appapi-ebook.books.com.tw/V1.3/CMSAPIApp/DeviceReg'.freeze
-    OAUTH_URL = 'https://appapi-ebook.books.com.tw/V1.3/CMSAPIApp/LoginURL?type=&device_id=&redirect_uri=https%3A%2F%2Fviewer-ebook.books.com.tw%2Fviewer%2Flogin.html'.freeze
-    OAUTH_ENDPOINT_URL = 'https://appapi-ebook.books.com.tw/V1.3/CMSAPIApp/MemberLogin?code='.freeze
-    BOOK_DL_URL = 'https://appapi-ebook.books.com.tw/V1.3/CMSAPIApp/BookDownLoadURL'.freeze
+    CMSAPI_PATH = 'https://appapi-ebook.books.com.tw/V1.7/CMSAPIApp/'.freeze
+
+    DEVICE_REG_URL = "#{CMSAPI_PATH}DeviceReg".freeze
+    OAUTH_URL = "#{CMSAPI_PATH}LoginURL?type=&device_id=&redirect_uri=https%3A%2F%2Fviewer-ebook.books.com.tw%2Fviewer%2Flogin.html".freeze
+    OAUTH_ENDPOINT_URL = "#{CMSAPI_PATH}MemberLogin?code=".freeze
+    BOOK_DL_URL = "#{CMSAPI_PATH}BookDownLoadURL".freeze
     # rubocop:enable Metrics/LineLength
 
     def initialize(book_id)
@@ -112,7 +114,7 @@ module BooksDL
       @logged = begin
         response = get(CART_URL)
 
-        response.status == 200
+        response.status == 200 || response.status == 302
       end
     end
 
